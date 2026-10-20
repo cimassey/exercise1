@@ -1,0 +1,12 @@
+**/bin/
+**/obj/
+.vs/
+.vscode/
+.env
+*.db
+*.db-shm
+*.db-wal
+*.dll
+*.pdb
+*.exe
+*.cache

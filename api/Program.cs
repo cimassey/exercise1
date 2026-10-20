@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using StargateAPI.Business.Commands;
 using StargateAPI.Business.Data;
+using StargateAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +21,15 @@ builder.Services.AddMediatR(cfg =>
 
 var app = builder.Build();
 
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<StargateContext>();
+    await context.Database.MigrateAsync();
+}
+
 // Configure the HTTP request pipeline.
+app.UseMiddleware<ProcessLoggingMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -34,4 +43,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-

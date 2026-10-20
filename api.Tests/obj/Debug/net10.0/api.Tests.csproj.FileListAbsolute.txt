@@ -1,7 +1,0 @@
-C:\Users\iviel\Downloads\tech_exercise_v.0.0.4\tech_exercise\tech_exercise\package\exercise1\api.Tests\bin\Debug\net10.0\.msCoverageSourceRootsMapping_api.Tests
-C:\Users\iviel\Downloads\tech_exercise_v.0.0.4\tech_exercise\tech_exercise\package\exercise1\api.Tests\bin\Debug\net10.0\CoverletSourceRootsMapping_api.Tests
-C:\Users\iviel\Downloads\tech_exercise_v.0.0.4\tech_exercise\tech_exercise\package\exercise1\api.Tests\obj\Debug\net10.0\api.Tests.csproj.AssemblyReference.cache
-C:\Users\iviel\Downloads\tech_exercise_v.0.0.4\tech_exercise\tech_exercise\package\exercise1\api.Tests\obj\Debug\net10.0\api.Tests.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\iviel\Downloads\tech_exercise_v.0.0.4\tech_exercise\tech_exercise\package\exercise1\api.Tests\obj\Debug\net10.0\api.Tests.AssemblyInfoInputs.cache
-C:\Users\iviel\Downloads\tech_exercise_v.0.0.4\tech_exercise\tech_exercise\package\exercise1\api.Tests\obj\Debug\net10.0\api.Tests.AssemblyInfo.cs
-C:\Users\iviel\Downloads\tech_exercise_v.0.0.4\tech_exercise\tech_exercise\package\exercise1\api.Tests\obj\Debug\net10.0\api.Tests.csproj.CoreCompileInputs.cache

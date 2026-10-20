@@ -134,7 +134,7 @@ public class PersonControllerTests
     }
 
     [Fact]
-    public async Task GetPersonByNameMediatorThrowsReturnsInternalServerError()
+    public async Task GetPersonByNameMediatorThrowsForRequestMiddlewareToHandle()
     {
         _mediatorMock
             .Setup(m => m.Send(
@@ -142,11 +142,7 @@ public class PersonControllerTests
                 It.IsAny<CancellationToken>()))
             .ThrowsAsync(new InvalidOperationException("Test exception"));
 
-        var result = await _controller.GetPersonByName("Controller-Error");
-
-        var objectResult = Assert.IsType<ObjectResult>(result);
-        Assert.Equal(
-            (int)HttpStatusCode.InternalServerError,
-            objectResult.StatusCode);
+        await Assert.ThrowsAsync<InvalidOperationException>(
+            () => _controller.GetPersonByName("Controller-Error"));
     }
 }
