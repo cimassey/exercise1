@@ -4,21 +4,31 @@ The Angular application searches the Stargate API for a person by name and displ
 
 ## Requirements
 
-- Node.js 20.19 or newer
+- Node.js 22.12 or newer (Angular CLI 20 does not run on Node.js 14)
 - npm 10 or newer
 - .NET 8 SDK
 
 ## Run locally
 
-Start the API using its HTTPS launch profile:
+Before installing dependencies, open a new terminal and verify the installed Node.js and npm versions:
 
 ```powershell
-dotnet run --project ..\api\StargateAPI.csproj --launch-profile https
+node --version
+node --version
 ```
 
-In a second terminal, from this directory:
+If Node.js is older than 22.12, install a current Node.js 22 LTS release, then close and reopen VS Code so its terminal uses the updated installation. Re-run the version checks; `node --version` should report `v22.12.0` or newer and `npm --version` should report `10` or newer.
+
+Open a terminal in the `exercise1` project root (the parent of `api` and `ui`) and start the API using its HTTPS launch profile:
 
 ```powershell
+dotnet run --project .\api\StargateAPI.csproj --launch-profile https
+```
+
+In a second terminal, change to the `ui` directory and start Angular:
+
+```powershell
+cd .\ui
 npm install
 npm start
 ```
