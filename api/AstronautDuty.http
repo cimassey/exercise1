@@ -1,0 +1,26 @@
+@baseUrl = http://localhost:5204
+
+### Create Jane Doe's first astronaut duty
+POST {{baseUrl}}/AstronautDuty
+Content-Type: application/json
+
+{
+  "name": "Jane Doe",
+  "rank": "Captain",
+  "dutyTitle": "Pilot",
+  "dutyStartDate": "2026-11-01"
+}
+
+### Retrieve Jane Doe's astronaut duties
+GET {{baseUrl}}/AstronautDuty/Jane%20Doe
+
+### Person must already exist
+POST {{baseUrl}}/AstronautDuty
+Content-Type: application/json
+
+{
+  "name": "Unknown Person",
+  "rank": "Captain",
+  "dutyTitle": "Pilot",
+  "dutyStartDate": "2026-11-01"
+}
