@@ -1,0 +1,237 @@
+<div class="app-shell">
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="ACTS home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="17" stroke="currentColor" stroke-width="1.5" />
+          <path d="M9 23.5c5.5-8.2 16.5-8.2 22 0M14 28c3-4 9-4 12 0M20 8v9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          <circle cx="20" cy="8" r="2" fill="currentColor" />
+        </svg>
+      </span>
+      <span class="brand-copy">
+        <strong>ACTS</strong>
+        <span>ASTRONAUT CAREER TRACKING</span>
+      </span>
+    </a>
+    <div class="topbar-meta">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span>MISSION ARCHIVE</span>
+      <span class="topbar-divider" aria-hidden="true"></span>
+      <span>STARGATE SYSTEMS</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div class="eyebrow"><span>01</span> PERSONNEL RECORDS</div>
+      <h1>Every mission<br /><span>leaves a mark.</span></h1>
+      <p class="intro-copy">
+        Explore the people behind the journey. Search an astronaut to uncover their assignments,
+        career milestones, and current status.
+      </p>
+
+      <form class="search-panel" (submit)="onSubmit($event)" novalidate>
+        <label for="astronaut-name">ASTRONAUT NAME</label>
+        <div class="search-controls">
+          <div class="input-wrap">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="10.8" cy="10.8" r="6.8" />
+              <path d="m16 16 4.5 4.5" />
+            </svg>
+            <input
+              id="astronaut-name"
+              name="astronautName"
+              type="search"
+              autocomplete="off"
+              placeholder="Try “John Doe”"
+              [value]="name"
+              [disabled]="loading"
+              aria-describedby="search-hint"
+              (input)="updateName($event)"
+            />
+            @if (name) {
+              <button
+                class="clear-button"
+                type="button"
+                aria-label="Clear search"
+                [disabled]="loading"
+                (click)="clearSearch()"
+              >
+                <svg viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="m5 5 10 10M15 5 5 15" />
+                </svg>
+              </button>
+            }
+          </div>
+          <button class="search-button" type="submit" [disabled]="loading || !name.trim()">
+            @if (loading) {
+              <span class="button-spinner" aria-hidden="true"></span>
+              <span>SEARCHING</span>
+            } @else {
+              <span>Find record</span>
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M3.5 10h12m-5-5 5 5-5 5" />
+              </svg>
+            }
+          </button>
+        </div>
+        <span class="search-hint" id="search-hint">Search is not case-sensitive</span>
+      </form>
+    </section>
+
+    <section class="record-section" aria-live="polite" aria-busy="{{ loading }}">
+      @if (loading) {
+        <div class="state-card loading-card">
+          <span class="large-spinner" aria-hidden="true"></span>
+          <div>
+            <strong>Retrieving personnel file</strong>
+            <p>Connecting to the mission archive…</p>
+          </div>
+        </div>
+      } @else if (errorMessage) {
+        <div class="state-card error-card" role="alert">
+          <span class="state-icon error-icon" aria-hidden="true">!</span>
+          <div>
+            <strong>We couldn’t retrieve this record</strong>
+            <p>{{ errorMessage }}</p>
+          </div>
+          <button class="retry-button" type="button" (click)="search()">Try again</button>
+        </div>
+      } @else if (searched && !person) {
+        <div class="state-card empty-card">
+          <span class="state-icon empty-icon" aria-hidden="true">?</span>
+          <div>
+            <strong>No personnel record found</strong>
+            <p>Check the spelling or try another name.</p>
+          </div>
+        </div>
+      } @else if (person) {
+        <div class="record-heading">
+          <div>
+            <div class="eyebrow"><span>02</span> PERSONNEL DOSSIER</div>
+            <h2>Career overview</h2>
+          </div>
+          <div class="record-reference">
+            <span>RECORD</span>
+            <strong>ACTS-{{ person.personId.toString().padStart(4, '0') }}</strong>
+          </div>
+        </div>
+
+        <article class="profile-card">
+          <div class="profile-orbit" aria-hidden="true">
+            <span class="orbit orbit-one"></span>
+            <span class="orbit orbit-two"></span>
+            <span class="orbit-core">{{ initials(person.name) }}</span>
+            <span class="orbit-star star-one">✦</span>
+            <span class="orbit-star star-two">·</span>
+          </div>
+          <div class="profile-info">
+            <div class="profile-label">
+              <span class="status-dot" [class.retired-dot]="isRetired"></span>
+              {{ isRetired ? 'CAREER COMPLETE' : hasCurrentDuty ? 'ACTIVE ASSIGNMENT' : 'PERSONNEL FILE' }}
+            </div>
+            <h3>{{ person.name }}</h3>
+            @if (hasCurrentDuty) {
+              <p class="current-role">{{ person.currentRank }} <span>/</span> {{ person.currentDutyTitle }}</p>
+            } @else {
+              <p class="current-role muted-role">No astronaut assignments on record</p>
+            }
+          </div>
+          <div class="career-dates">
+            <div>
+              <span>CAREER START</span>
+              <strong>{{ person.careerStartDate ? (person.careerStartDate | date: 'MMM d, y') : '—' }}</strong>
+            </div>
+            <div class="career-date-divider"></div>
+            <div>
+              <span>{{ isRetired ? 'CAREER END' : 'CAREER STATUS' }}</span>
+              <strong>{{ person.careerEndDate ? (person.careerEndDate | date: 'MMM d, y') : (hasCurrentDuty ? 'In progress' : 'Not started') }}</strong>
+            </div>
+          </div>
+        </article>
+
+        <div class="timeline-heading">
+          <div>
+            <div class="eyebrow"><span>03</span> FLIGHT HISTORY</div>
+            <h2>Duty timeline <span class="count-pill">{{ duties.length }}</span></h2>
+          </div>
+          @if (duties.length > 0) {
+            <span class="sort-label">MOST RECENT FIRST <span aria-hidden="true">↓</span></span>
+          }
+        </div>
+
+        @if (duties.length > 0) {
+          <div class="timeline">
+            @for (duty of duties; track duty.id; let last = $last) {
+              <article class="duty-row" [class.current-duty]="!duty.dutyEndDate">
+                <div class="timeline-marker" aria-hidden="true">
+                  <span class="marker-dot"></span>
+                  @if (!last) {
+                    <span class="marker-line"></span>
+                  }
+                </div>
+                <div class="duty-card">
+                  <div class="duty-main">
+                    <div class="duty-title-line">
+                      <h3>{{ duty.dutyTitle }}</h3>
+                      @if (!duty.dutyEndDate) {
+                        <span class="current-badge"><span></span> CURRENT</span>
+                      }
+                    </div>
+                    <p class="duty-rank">{{ duty.rank }} <span>·</span> Astronaut Duty</p>
+                  </div>
+                  <div class="duty-period">
+                    <div class="period-item">
+                      <span>STARTED</span>
+                      <strong>{{ duty.dutyStartDate | date: 'MMM d, y' }}</strong>
+                    </div>
+                    <div class="period-arrow" aria-hidden="true">→</div>
+                    <div class="period-item">
+                      <span>ENDED</span>
+                      <strong>{{ duty.dutyEndDate ? (duty.dutyEndDate | date: 'MMM d, y') : 'Present' }}</strong>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            }
+          </div>
+        } @else {
+          <div class="no-duties">
+            <span class="no-duties-icon" aria-hidden="true">✧</span>
+            <div>
+              <strong>No astronaut duties yet</strong>
+              <p>This person is in the ACTS personnel archive but has no recorded assignments.</p>
+            </div>
+          </div>
+        }
+      } @else {
+        <div class="welcome-card">
+          <div class="welcome-art" aria-hidden="true">
+            <span class="welcome-planet"></span>
+            <span class="welcome-ring"></span>
+            <span class="welcome-moon"></span>
+            <span class="welcome-star star-a">✦</span>
+            <span class="welcome-star star-b">✧</span>
+            <span class="welcome-star star-c">·</span>
+          </div>
+          <div class="welcome-copy">
+            <div class="eyebrow"><span>ARCHIVE ACCESS</span></div>
+            <h2>A universe of<br />careers awaits.</h2>
+            <p>Enter a name above to explore an astronaut’s journey, from first assignment to present day.</p>
+            <div class="sample-search">
+              <span>START WITH</span>
+              <button type="button" (click)="searchFor('John Doe')">John Doe <span aria-hidden="true">↗</span></button>
+              <button type="button" (click)="searchFor('Jane Doe')">Jane Doe <span aria-hidden="true">↗</span></button>
+            </div>
+          </div>
+          <div class="welcome-coordinate" aria-hidden="true">38° 53′ N<br />77° 02′ W</div>
+        </div>
+      }
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>ACTS <span class="footer-muted">/ ASTRONAUT CAREER TRACKING SYSTEM</span></span>
+    <span>PERSONNEL ARCHIVE <span class="footer-divider">·</span> EST. 2026</span>
+  </footer>
+</div>
