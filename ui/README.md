@@ -14,7 +14,7 @@ Before installing dependencies, open a new terminal and verify the installed Nod
 
 ```powershell
 node --version
-node --version
+npm --version
 ```
 
 If Node.js is older than 22.12, install a current Node.js 22 LTS release, then close and reopen VS Code so its terminal uses the updated installation. Re-run the version checks; `node --version` should report `v22.12.0` or newer and `npm --version` should report `10` or newer.
